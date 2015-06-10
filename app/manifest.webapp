@@ -1,0 +1,42 @@
+{
+  "version": "0.0.1",
+  "name": "Conteur",
+  "description": "Conteur Audiobook Player",
+  "type": "privileged",
+  "launch_path": "/index.html",
+  "icons": {
+    "60": "/icons/icon-60.png",
+    "128": "/icons/icon-128.png",
+    "512": "/icons/icon-512.png"
+  },
+  "developer": {
+    "name": "Hugo Agbonon",
+    "url": "http://www.conteur.me"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "en",
+  "permissions": {
+    "device-storage:music": {
+      "access": "readonly",
+      "description": "Reading music"
+    },
+    "device-storage:sdcard": {
+      "access": "readonly",
+      "description": "Reading device storage"
+    }
+  },
+  "activities": {
+    "pick-folder": {
+      "disposition": "inline",
+      "returnValue": true,
+      "href": "/activities/file-picker/index.html"
+    },
+    "pick-file": {
+      "disposition": "inline",
+      "returnValue": true,
+      "href": "/activities/file-picker/index.html"
+    }
+  }
+}
