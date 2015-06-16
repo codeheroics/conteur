@@ -1,9 +1,6 @@
-'use strict';
+import localforage from 'localforage';
 
-var localforage = require('localforage');
-var Book = require('../models/Book');
-
-export default  {
+export default {
   BOOKS_PATH_KEY: '__booksPath',
 
   pickDirectory() {
@@ -34,14 +31,14 @@ export default  {
     return localforage.setItem(this.BOOKS_PATH_KEY, path);
   },
 
-  loadBooksFromDirectory() {
+  fetchFilesFromDirectory() {
     return this.getBooksPath().then((path) => {
       // FIXME this is a workaround path containing device name
       var deviceStorageName = path.substr(0, path.indexOf('/'));
       var deviceStorages = navigator.getDeviceStorages('sdcard');
       var chosenDeviceStorage = deviceStorages.find(deviceStorage => deviceStorage.storageName === deviceStorageName);
       if (chosenDeviceStorage) path = path.substr(path.indexOf('/') + 1);
-      else chosenDeviceStorage = deviceStorage.getDeviceStorage('sdcard');
+      else chosenDeviceStorage = navigator.deviceStorage.getDeviceStorage('sdcard');
       var cursor = chosenDeviceStorage.enumerate(path); // FIXME THIS IS NOT AT ALL DOING THE FILTER IT'S SAID TO BE DOING HERE >_< https://developer.mozilla.org/en-US/docs/Web/API/DeviceStorage/enumerate
       var files = [];
 
@@ -51,25 +48,19 @@ export default  {
 
           if (!this || this.done) return resolve(files);
           this.continue();
-        }
+        };
 
         cursor.onerror = function () {
-          console.warn("No file found: ", this.error);
           reject(this.error);
-        }
+        };
       })
       .then(function() {
-        return Promise.all(
-          Book.createFromFiles(files).map(book => book.save())
-        );
-      })
-      .then(Book.getList.bind(Book));
+        return files;
+      });
     });
   },
 
-  pickDirectoryAndGetBooks() {
-    return this.pickDirectory().then(this.loadBooksFromDirectory.bind(this)).catch((err) => {
-      if (err) console.log(err);
-    });
+  pickDirectoryAndGetFiles() {
+    return this.pickDirectory().then(this.fetchFilesFromDirectory.bind(this));
   }
 };

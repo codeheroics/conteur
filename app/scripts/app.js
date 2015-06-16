@@ -1,21 +1,16 @@
+import React from 'react';
+import Router from 'react-router';
 
-var React = window.React = require('react');
-var Router = require('react-router');
+let {DefaultRoute, Route, RouteHandler} = Router;
 
-var {DefaultRoute, Link, Route, RouteHandler} = Router;
+import BookPlayer from './ui/BookPlayer.jsx';
+import BooksList from './ui/BooksList.jsx';
+import Toolbar from './ui/Toolbar.jsx';
 
-var BookPlayer = require('./ui/BookPlayer.jsx');
-var BooksList = require('./ui/BooksList.jsx');
-var Toolbar = require('./ui/Toolbar.jsx');
-
-var fileManager = require('./lib/fileManager.js');
+import localforage from 'localforage';
+localforage.setDriver(localforage.LOCALSTORAGE);
 
 var Conteur = React.createClass({
-  pickDirectory: fileManager.pickDirectory,
-
-  getInitialState: function() {
-    return {items: [], text: ''}; // Will need to chage this
-  },
   render: function() {
     return (
       <div>

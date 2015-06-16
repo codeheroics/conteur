@@ -1,18 +1,15 @@
-'use strict';
+import React from 'react';
+import BookControls from './BookControls.jsx';
 
-var React = require('react');
-var Book = require('../models/Book');
-var BookControls = require('./BookControls.jsx');
-
-module.exports = React.createClass({
+export default React.createClass({
   getInitialState() {
     return {};
   },
   componentDidMount: function() {
-    return Book.find(this.props.params.slug).then((book) => {
-      if (!book) return alert('Error finding Book');
-      this.setState(book);
-    });
+    // return Book.find(this.props.params.slug).then((book) => {
+    //   if (!book) return alert('Error finding Book');
+    //   this.setState(book);
+    // });
   },
   render: function() {
     return (
